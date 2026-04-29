@@ -1,8 +1,7 @@
 import { Crown, User } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
+import { Navigate, useSearchParams } from 'react-router-dom'
 import content from '../data/content-details.json'
 import { ModuleTitlerow } from '../components/ModuleTitlerow'
-import { useSession } from '../context/SessionContext'
 
 const page = content.pages['customer-portal'] as typeof content.pages['customer-portal'] & {
   moduleTitlerow?: { lead: string }
@@ -10,8 +9,9 @@ const page = content.pages['customer-portal'] as typeof content.pages['customer-
 
 export function CustomerPortalPage() {
   const [sp] = useSearchParams()
-  const profile = sp.get('tab') === 'profile'
-  const { displayName, subtitle, userInitials } = useSession()
+  if (sp.get('tab') === 'profile') {
+    return <Navigate to="/my-profile" replace />
+  }
 
   const hero = page.elements.find((e) => e.id === 'hero-card')!.content as {
     tierLabel: string
@@ -20,40 +20,6 @@ export function CustomerPortalPage() {
   }
   const statsEl = page.elements.find((e) => e.id === 'customer-stats')!
   const statList = (statsEl.content as { stats: { label: string; value: string }[] }).stats
-
-  if (profile) {
-    return (
-      <div className="stack-page stack-page--customer">
-        <ModuleTitlerow lead="My profile" meta={<span className="muted">Account & contact</span>} />
-        <section className="panel customer-profile-panel reveal">
-          <div className="customer-profile-panel__head">
-            <div className="customer-profile-avatar">{userInitials}</div>
-            <div>
-              <h2 className="customer-profile-name">{displayName}</h2>
-              <p className="muted">{subtitle}</p>
-            </div>
-          </div>
-          <dl className="customer-profile-dl">
-            <div>
-              <dt>Phone</dt>
-              <dd>+60 12-345 6789</dd>
-            </div>
-            <div>
-              <dt>Member tier</dt>
-              <dd>{hero.tierLabel}</dd>
-            </div>
-            <div>
-              <dt>Points balance</dt>
-              <dd>{hero.pointsDisplay}</dd>
-            </div>
-          </dl>
-          <p className="muted" style={{ fontSize: 13, marginTop: 16 }}>
-            Update your details at the counter or call support — this screen is read-only in the demo.
-          </p>
-        </section>
-      </div>
-    )
-  }
 
   return (
     <div className="stack-page stack-page--customer">

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { ThemeToggle } from '../components/ThemeToggle'
 import { useCustomerShell } from '../context/CustomerShellContext'
+import { useNotifications } from '../context/NotificationContext'
 import { useSession } from '../context/SessionContext'
 
 export function CustomerTopBar() {
@@ -10,6 +11,7 @@ export function CustomerTopBar() {
   const navigate = useNavigate()
   const { topSearch, setTopSearch } = useCustomerShell()
   const { userInitials, displayName, logout } = useSession()
+  const { toggle: toggleNotif, unreadCount } = useNotifications()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -41,8 +43,12 @@ export function CustomerTopBar() {
   const placeholder =
     pathname === '/shop'
       ? 'Search products, SKU, category…'
-      : pathname.startsWith('/my-orders')
+      : pathname === '/book'
+        ? 'Search services, repairs, trade-in…'
+        : pathname.startsWith('/my-orders')
         ? 'Search order ID…'
+        : pathname === '/my-bookings'
+        ? 'Search services, outlets…'
         : 'Search…'
 
   const handleLogout = () => {
@@ -69,6 +75,12 @@ export function CustomerTopBar() {
             Shop
           </NavLink>
           <NavLink
+            to="/book"
+            className={({ isActive }) => `customer-topbar__nav-link${isActive ? ' is-active' : ''}`}
+          >
+            Booking
+          </NavLink>
+          <NavLink
             to="/my-orders"
             className={() =>
               `customer-topbar__nav-link${
@@ -77,6 +89,14 @@ export function CustomerTopBar() {
             }
           >
             My orders
+          </NavLink>
+          <NavLink
+            to="/my-bookings"
+            className={({ isActive }) =>
+              `customer-topbar__nav-link${isActive ? ' is-active' : ''}`
+            }
+          >
+            My bookings
           </NavLink>
         </nav>
       </div>
@@ -102,9 +122,9 @@ export function CustomerTopBar() {
             <MessageSquare width={16} height={16} strokeWidth={2} />
           </NavLink>
           <ThemeToggle className="bell pos-bell" />
-          <button type="button" className="bell pos-bell" aria-label="Notifications">
+          <button type="button" className="bell pos-bell" aria-label="Notifications" onClick={toggleNotif}>
             <Bell width={16} height={16} strokeWidth={2} />
-            <span className="dot" />
+            {unreadCount > 0 && <span className="dot" />}
           </button>
         </div>
 
@@ -126,7 +146,7 @@ export function CustomerTopBar() {
                 <span className="muted customer-avatar-menu__sub">Member</span>
               </div>
               <NavLink
-                to="/customer-portal?tab=profile"
+                to="/my-profile"
                 role="menuitem"
                 className="customer-avatar-menu__item"
                 onClick={() => setMenuOpen(false)}

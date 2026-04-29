@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Award,
+  CalendarDays,
   Receipt,
   ShoppingCart,
   Sparkles,
@@ -96,14 +97,7 @@ export function DashboardPage() {
   }
 
   const kpiIcon = (name: string, tone: string) => {
-    const c =
-      tone === 'tone-green'
-        ? 'tone-green'
-        : tone === 'tone-sky'
-          ? 'tone-sky'
-          : tone === 'tone-violet'
-            ? 'tone-violet'
-            : 'tone-amber'
+    const c = tone as 'tone-green' | 'tone-sky' | 'tone-violet' | 'tone-mint' | 'tone-amber'
     const ic =
       name === 'TrendingUp' ? (
         <TrendingUp size={18} strokeWidth={2} />
@@ -113,14 +107,23 @@ export function DashboardPage() {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="m2 7 1-4h18l1 4M3 7v13h18V7M8 12h8" />
         </svg>
+      ) : name === 'CalendarDays' ? (
+        <CalendarDays size={18} strokeWidth={2} />
       ) : (
         <AlertTriangle size={18} strokeWidth={2} />
       )
     return { c, ic }
   }
 
-  const toneForKpi = (i: number) =>
-    i === 0 ? 'tone-green' : i === 1 ? 'tone-sky' : i === 2 ? 'tone-violet' : 'tone-amber'
+  const toneForKpi = (i: number): 'tone-green' | 'tone-sky' | 'tone-violet' | 'tone-mint' | 'tone-amber' =>
+    ([
+      'tone-green',
+      'tone-sky',
+      'tone-violet',
+      'tone-mint',
+      'tone-amber',
+    ][i] as 'tone-green' | 'tone-sky' | 'tone-violet' | 'tone-mint' | 'tone-amber' | undefined) ??
+    'tone-amber'
 
   return (
     <>
@@ -218,14 +221,26 @@ export function DashboardPage() {
                   <svg className="kpi-spark" viewBox="0 0 110 50" preserveAspectRatio="none" aria-hidden>
                     <polyline
                       fill="none"
-                      stroke={i === 0 ? 'var(--green)' : i === 1 ? 'var(--tone-sky)' : 'var(--tone-amber)'}
+                      stroke={
+                        i === 0
+                          ? 'var(--green)'
+                          : i === 1
+                            ? 'var(--tone-sky)'
+                            : i === 3
+                              ? 'var(--tone-mint)'
+                              : 'var(--tone-amber)'
+                      }
                       strokeWidth="2"
                       points={
                         i === 0
                           ? '0,38 12,32 24,34 36,28 48,30 60,22 72,24 84,16 96,18 110,8'
                           : i === 1
                             ? '0,40 14,36 28,30 42,34 56,24 70,26 84,18 98,20 110,12'
-                            : '0,42 12,40 24,38 36,36 48,32 60,30 72,26 84,22 96,18 110,12'
+                            : i === 3
+                              ? '0,44 10,42 22,38 34,34 46,36 56,28 68,26 78,22 92,14 105,18 110,10'
+                              : i === 4
+                                ? '0,36 14,38 26,42 38,46 52,42 62,46 74,42 96,46 105,42 110,44'
+                              : '0,42 12,40 24,38 36,36 48,32 60,30 72,26 84,22 96,18 110,12'
                       }
                     />
                   </svg>

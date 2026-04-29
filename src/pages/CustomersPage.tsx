@@ -1,4 +1,4 @@
-import { Crown, ChevronLeft, Search } from 'lucide-react'
+import { Crown, ChevronLeft, Phone, Search } from 'lucide-react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useMemo, useState } from 'react'
 import { ModuleTitlerow } from '../components/ModuleTitlerow'
@@ -35,41 +35,44 @@ export function CustomersPage() {
           <ChevronLeft size={18} strokeWidth={2} /> Customers
         </button>
 
-        <ModuleTitlerow
-          lead="Profile"
-          meta={
-            <>
-              <b>{c.tier}</b> · <b>{c.points}</b> pts · {c.phone}
-            </>
-          }
-        />
-
         <div className="loyalty-split">
-          <div className="profile-card">
-            <div className="big-ava">{c.initials}</div>
-            <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 6 }}>{c.name}</h2>
-            <p className="muted">{c.phone}</p>
-            <span
-              className="badge tag"
-              style={{ letterSpacing: 1.2, fontSize: 9.5, fontWeight: 800 }}
-            >
-              <Crown size={10} strokeWidth={2} /> {c.tier}
-            </span>
-            <p style={{ marginTop: 20, fontSize: 24, fontWeight: 800 }}>
-              {c.points} <span style={{ fontSize: 14, fontWeight: 500 }}>points</span>
-            </p>
-            <div style={{ marginTop: 20, display: 'grid', gap: 8, fontSize: 13 }}>
-              <div>
-                Visits: <strong>{c.visits}</strong>
-              </div>
-              <div>
-                Lifetime: <strong>{c.lifetimeSpend}</strong>
-              </div>
-              <div>
-                Joined: <strong>{c.joined}</strong>
-              </div>
+          <aside className="inv-detail-aside cm-profile-aside">
+            <div className="inv-detail-figure cm-profile-figure">
+              <Crown className="cm-profile-figure-deco" size={36} strokeWidth={1.25} aria-hidden />
+              <span className="cm-profile-figure-initials">{c.initials}</span>
             </div>
-          </div>
+
+            <h1 className="inv-detail-title">{c.name}</h1>
+
+            <div className="inv-detail-meta cm-profile-meta">
+              <span className="nav-tag">{c.tier}</span>
+              <span className="badge tag">
+                <Phone size={11} strokeWidth={2} aria-hidden />
+                {c.phone}
+              </span>
+            </div>
+
+            <section className="inv-detail-overview" aria-label="Member overview">
+              <dl>
+                <div className="inv-detail-overview-row">
+                  <dt>Points balance</dt>
+                  <dd className="cm-profile-points-dd">{c.points} pts</dd>
+                </div>
+                <div className="inv-detail-overview-row">
+                  <dt>Visits</dt>
+                  <dd>{c.visits}</dd>
+                </div>
+                <div className="inv-detail-overview-row">
+                  <dt>Lifetime spend</dt>
+                  <dd>{c.lifetimeSpend}</dd>
+                </div>
+                <div className="inv-detail-overview-row">
+                  <dt>Member since</dt>
+                  <dd>{c.joined}</dd>
+                </div>
+              </dl>
+            </section>
+          </aside>
           <article className="panel">
             <div className="panel-head">
               <div>

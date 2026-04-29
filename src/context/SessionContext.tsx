@@ -9,16 +9,20 @@ import {
 
 export type UserRole = 'hq_admin' | 'outlet_manager' | 'outlet_staff' | 'customer'
 
+/** Single outlet for outlet roles (mock — matches booking seed `mv`). */
+export type ManagedOutlet = { id: string; name: string }
+
 type SessionState = {
   role: UserRole | null
   setRole: (r: UserRole | null) => void
-  login: (role: UserRole) => void
+  login: (r: UserRole) => void
   logout: () => void
   /** Nav group from content-details */
   navGroup: 'hq' | 'staff' | 'customer'
   displayName: string
   subtitle: string
   userInitials: string
+  managedOutlet: ManagedOutlet | null
 }
 
 const SessionContext = createContext<SessionState | null>(null)
@@ -27,6 +31,13 @@ function navGroupForRole(role: UserRole): 'hq' | 'staff' | 'customer' {
   if (role === 'outlet_staff') return 'staff'
   if (role === 'customer') return 'customer'
   return 'hq'
+}
+
+function managedOutletForRole(role: UserRole): ManagedOutlet | null {
+  if (role === 'outlet_manager' || role === 'outlet_staff') {
+    return { id: 'mv', name: 'Mid Valley Mega Mall' }
+  }
+  return null
 }
 
 function profileForRole(role: UserRole): { name: string; subtitle: string; initials: string } {
@@ -75,6 +86,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   const navGroup = role ? navGroupForRole(role) : 'hq'
   const p = role ? profileForRole(role) : profileForRole('outlet_manager')
+  const managedOutlet = role ? managedOutletForRole(role) : null
 
   const value = useMemo(
     () => ({
@@ -86,8 +98,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       displayName: p.name,
       subtitle: p.subtitle,
       userInitials: p.initials,
+      managedOutlet,
     }),
-    [role, login, logout, navGroup, p.name, p.subtitle, p.initials],
+    [role, login, logout, navGroup, p.name, p.subtitle, p.initials, managedOutlet],
   )
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>

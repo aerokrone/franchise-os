@@ -9,28 +9,28 @@
       "label": "HQ Admin",
       "description": "Headquarters administrator with full visibility across all outlets",
       "icon": "Building2",
-      "pages": ["dashboard", "ai-bi", "inventory", "customers"]
+      "pages": ["dashboard", "booking-franchise", "ai-bi", "inventory", "customers"]
     },
     {
       "role": "outlet_manager",
       "label": "Outlet Manager",
       "description": "Manager of a specific outlet with full operational control",
       "icon": "Store",
-      "pages": ["dashboard", "ai-bi", "pos", "inventory", "customers"]
+      "pages": ["dashboard", "booking-services", "booking-desk", "ai-bi", "pos", "inventory", "store-orders", "customers"]
     },
     {
       "role": "outlet_staff",
       "label": "Outlet Staff",
       "description": "Front-line staff handling daily operations",
       "icon": "User",
-      "pages": ["pos", "inventory"]
+      "pages": ["pos", "booking-desk", "inventory", "store-orders"]
     },
     {
       "role": "customer",
       "label": "Customer",
       "description": "End customer accessing loyalty program and support",
       "icon": "UserCircle2",
-      "pages": ["customer-portal", "ai-customer-chat"]
+      "pages": ["shop", "book", "customer-portal", "my-orders", "ai-customer-chat"]
     }
   ],
   "pages": {
@@ -100,9 +100,9 @@
         {
           "id": "kpi-row",
           "type": "kpi-grid",
-          "description": "4 key performance indicator cards in horizontal row",
+          "description": "Five key performance indicator cards showing operations + bookings",
           "position": "below-briefing",
-          "layout": "4-column-grid",
+          "layout": "5-column-grid",
           "cards": [
             {
               "label": "Sales Today",
@@ -127,6 +127,14 @@
               "deltaType": "positive",
               "subtext": "all operational",
               "icon": "Store"
+            },
+            {
+              "label": "Bookings Scheduled",
+              "value": "24",
+              "delta": "+19%",
+              "deltaType": "positive",
+              "subtext": "service desks · MTD vs last month",
+              "icon": "CalendarDays"
             },
             {
               "label": "Stock Alerts",
@@ -758,6 +766,8 @@
       "navItemsByRole": {
         "hq": [
           { "key": "dashboard", "label": "Dashboard", "icon": "LayoutDashboard" },
+          { "key": "services", "label": "Services", "icon": "Layers" },
+          { "key": "bookings", "label": "Bookings", "icon": "CalendarRange" },
           { "key": "pos", "label": "Sales POS", "icon": "ShoppingCart" },
           { "key": "inventory", "label": "Inventory", "icon": "Boxes" },
           { "key": "store-orders", "label": "Store orders", "icon": "ClipboardList" },
@@ -765,11 +775,13 @@
         ],
         "staff": [
           { "key": "pos", "label": "POS Sale", "icon": "ShoppingCart" },
+          { "key": "bookings", "label": "Bookings", "icon": "CalendarRange" },
           { "key": "inventory", "label": "Inventory", "icon": "Boxes" },
           { "key": "store-orders", "label": "Store orders", "icon": "ClipboardList" }
         ],
         "customer": [
           { "key": "shop", "label": "Shop", "icon": "ShoppingBag" },
+          { "key": "book", "label": "Booking", "icon": "CalendarDays" },
           { "key": "customer-portal", "label": "Loyalty", "icon": "Award" },
           { "key": "my-orders", "label": "My orders", "icon": "Truck" },
           { "key": "ai-customer-chat", "label": "Help & Chat", "icon": "MessageSquare" }

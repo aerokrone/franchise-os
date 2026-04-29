@@ -2,6 +2,7 @@ import { Bell, Search, Sparkles } from 'lucide-react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useMemo } from 'react'
 import { ThemeToggle } from '../components/ThemeToggle'
+import { useNotifications } from '../context/NotificationContext'
 import { useSession } from '../context/SessionContext'
 
 const titles: Record<string, { crumb: string[]; search: string }> = {
@@ -49,13 +50,48 @@ const titles: Record<string, { crumb: string[]; search: string }> = {
     crumb: ['Outlet', 'Mid Valley', 'Orders'],
     search: 'Search order, customer…',
   },
+  '/book': {
+    crumb: ['You', 'Book', 'Services'],
+    search: 'Search services, SKUs…',
+  },
+  '/bookings': {
+    crumb: ['Outlet', 'Mid Valley', 'Bookings'],
+    search: 'Search booking, customer…',
+  },
+  '/booking-desk': {
+    crumb: ['Outlet', 'Mid Valley', 'Booking desk'],
+    search: 'Queue, customer phone…',
+  },
+  '/booking-franchise': {
+    crumb: ['Network', 'HQ', 'Franchise booking'],
+    search: 'SKU, outlet, tier…',
+  },
+  '/booking-services': {
+    crumb: ['Outlet', 'Mid Valley', 'Outlet services'],
+    search: 'SKU, channel…',
+  },
 }
 
 export function DashboardTopBar() {
   const { pathname } = useLocation()
   const { navGroup, role } = useSession()
+  const { toggle, unreadCount } = useNotifications()
 
   const cfg = useMemo(() => {
+    if (pathname.startsWith('/my-profile')) {
+      const staff = navGroup === 'staff'
+      const crumbBase = staff ? ['Outlet', 'Mid Valley Cafe'] : ['Workspace', 'Account']
+      if (pathname.startsWith('/my-profile/security')) {
+        return {
+          crumb: [...crumbBase, 'Security'],
+          search: 'Search security settings…',
+        }
+      }
+      return {
+        crumb: [...crumbBase, 'My profile'],
+        search: staff ? 'Search staff profile…' : 'Search HQ profile…',
+      }
+    }
     if (pathname.startsWith('/customers/')) {
       return titles['/customers-profile']
     }
@@ -78,7 +114,7 @@ export function DashboardTopBar() {
       return titles['/inventory-hq']
     }
     return titles[pathname] ?? titles['/dashboard']
-  }, [pathname, role])
+  }, [pathname, role, navGroup])
 
   return (
     <header className="topbar">
@@ -104,9 +140,9 @@ export function DashboardTopBar() {
           </NavLink>
         ) : null}
         <ThemeToggle className="bell" />
-        <button type="button" className="bell" aria-label="Notifications">
+        <button type="button" className="bell" aria-label="Notifications" onClick={toggle}>
           <Bell width={16} height={16} strokeWidth={2} />
-          <span className="dot" />
+          {unreadCount > 0 && <span className="dot" />}
         </button>
       </div>
     </header>

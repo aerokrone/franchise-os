@@ -1,0 +1,795 @@
+{
+  "$schema": "https://content-details.schema/v1",
+  "name": "Franchise OS Content Details",
+  "version": "1.0.0",
+  "description": "Complete hierarchy of user roles, pages, and UI elements for the Franchise OS mockup",
+  "users": [
+    {
+      "role": "hq_admin",
+      "label": "HQ Admin",
+      "description": "Headquarters administrator with full visibility across all outlets",
+      "icon": "Building2",
+      "pages": ["dashboard", "ai-bi", "inventory", "customers"]
+    },
+    {
+      "role": "outlet_manager",
+      "label": "Outlet Manager",
+      "description": "Manager of a specific outlet with full operational control",
+      "icon": "Store",
+      "pages": ["dashboard", "ai-bi", "pos", "inventory", "customers"]
+    },
+    {
+      "role": "outlet_staff",
+      "label": "Outlet Staff",
+      "description": "Front-line staff handling daily operations",
+      "icon": "User",
+      "pages": ["pos", "inventory"]
+    },
+    {
+      "role": "customer",
+      "label": "Customer",
+      "description": "End customer accessing loyalty program and support",
+      "icon": "UserCircle2",
+      "pages": ["customer-portal", "ai-customer-chat"]
+    }
+  ],
+  "pages": {
+    "login": {
+      "name": "Login Screen",
+      "description": "Entry point where users select their role to access the system",
+      "usedBy": ["all"],
+      "elements": [
+        {
+          "id": "logo-section",
+          "type": "branding",
+          "description": "Franchise OS logo with gradient background (primary to accent)",
+          "content": "Large 'F' letter in white, 'Franchise OS' heading, tagline 'The AI-powered operating system for franchise businesses'"
+        },
+        {
+          "id": "email-field",
+          "type": "input",
+          "description": "Email address input field",
+          "content": "Default: demo@franchise-os.my"
+        },
+        {
+          "id": "password-field",
+          "type": "input",
+          "description": "Password input field",
+          "content": "Masked input showing dots"
+        },
+        {
+          "id": "role-selector",
+          "type": "button-group",
+          "description": "4 role selection buttons in 2x2 grid",
+          "content": [
+            { "label": "HQ Admin", "icon": "Building2", "navigatesTo": "dashboard" },
+            { "label": "Outlet Manager", "icon": "Store", "navigatesTo": "dashboard" },
+            { "label": "Outlet Staff", "icon": "User", "navigatesTo": "pos" },
+            { "label": "Customer", "icon": "UserCircle2", "navigatesTo": "shop" }
+          ]
+        }
+      ]
+    },
+    "dashboard": {
+      "name": "Operations Overview Dashboard",
+      "description": "HQ-level overview of all outlet performance, AI insights, and key metrics",
+      "usedBy": ["hq_admin", "outlet_manager"],
+      "layout": {
+        "hasSidebar": true,
+        "hasTopBar": true,
+        "structure": "vertical-stack"
+      },
+      "elements": [
+        {
+          "id": "ai-daily-briefing",
+          "type": "ai-card",
+          "description": "AI-generated daily summary with actionable insights",
+          "position": "top-full-width",
+          "content": {
+            "icon": "Sparkles",
+            "badge": "AI Daily Briefing",
+            "timestamp": "7:00 AM · Confidence 78%",
+            "summary": "Yesterday: 2 of 3 outlets exceeded target; Mid Valley led at +16% MTD. 1 Utama flagged — sales down 18% vs. 30-day baseline. Stock alerts: 5 SKUs need replenishment.",
+            "actions": [
+              { "label": "Review 1 Utama →", "type": "primary" },
+              { "label": "See full insights →", "type": "ghost", "navigatesTo": "ai-bi" },
+              { "label": "👍 Helpful 👎", "type": "feedback", "position": "far-right" }
+            ]
+          }
+        },
+        {
+          "id": "kpi-row",
+          "type": "kpi-grid",
+          "description": "4 key performance indicator cards in horizontal row",
+          "position": "below-briefing",
+          "layout": "4-column-grid",
+          "cards": [
+            {
+              "label": "Sales Today",
+              "value": "RM 13,350",
+              "delta": "+8.2%",
+              "deltaType": "positive",
+              "subtext": "vs. yesterday",
+              "icon": "TrendingUp"
+            },
+            {
+              "label": "Orders Today",
+              "value": "487",
+              "delta": "+12.4%",
+              "deltaType": "positive",
+              "subtext": "vs. yesterday",
+              "icon": "ShoppingCart"
+            },
+            {
+              "label": "Active Outlets",
+              "value": "3 / 3",
+              "delta": "100%",
+              "deltaType": "positive",
+              "subtext": "all operational",
+              "icon": "Store"
+            },
+            {
+              "label": "Stock Alerts",
+              "value": "5",
+              "delta": "↑ 2",
+              "deltaType": "warning",
+              "subtext": "across 2 outlets",
+              "icon": "AlertTriangle"
+            }
+          ]
+        },
+        {
+          "id": "sales-trend-chart",
+          "type": "chart-container",
+          "description": "Area chart showing 30-day sales trend across all outlets",
+          "position": "middle-left",
+          "span": "2-columns",
+          "content": {
+            "title": "Sales Trend · Last 30 days",
+            "subtitle": "All outlets combined",
+            "badge": { "text": "+14.3% MoM", "type": "positive", "icon": "TrendingUp" },
+            "chartType": "area-chart",
+            "dataPoints": 30,
+            "height": "200px",
+            "gradientFill": "primary color with opacity fade",
+            "features": ["responsive", "tooltip-on-hover", "RM format on Y-axis"]
+          }
+        },
+        {
+          "id": "activity-feed",
+          "type": "feed-panel",
+          "description": "Live activity feed showing recent events across outlets",
+          "position": "middle-right",
+          "span": "1-column",
+          "content": {
+            "title": "Activity Feed",
+            "badge": "Live",
+            "items": [
+              { "icon": "ShoppingCart", "color": "positive", "title": "Large transaction", "desc": "RM 1,250 · Mid Valley · 14:23" },
+              { "icon": "AlertTriangle", "color": "warning", "title": "Stock alert", "desc": "True Wireless Earbuds Pro at 1 Utama · 13:45" },
+              { "icon": "Receipt", "color": "accent", "title": "Refund processed", "desc": "RM 87.50 · KL Sentral · 12:08" },
+              { "icon": "Award", "color": "primary", "title": "New Gold customer", "desc": "Priya Nair reached 20K pts · 11:55" },
+              { "icon": "Truck", "color": "inkMuted", "title": "Stock transfer", "desc": "MV → 1U · 24 units · 10:20" }
+            ]
+          }
+        },
+        {
+          "id": "outlet-performance-table",
+          "type": "data-table",
+          "description": "Detailed outlet performance comparison table",
+          "position": "bottom-full-width",
+          "content": {
+            "title": "Outlet Performance · This Month",
+            "filter": { "label": "Klang Valley", "icon": "Filter" },
+            "columns": [
+              { "key": "outlet", "label": "Outlet", "type": "compound", "align": "left" },
+              { "key": "today", "label": "Today", "type": "currency", "align": "right" },
+              { "key": "mtd", "label": "MTD", "type": "currency", "align": "right" },
+              { "key": "vsTarget", "label": "vs. Target", "type": "percentage-badge", "align": "right" },
+              { "key": "topItem", "label": "Top Item", "type": "text", "align": "left" },
+              { "key": "alerts", "label": "Alerts", "type": "alert-badge", "align": "center" },
+              { "key": "actions", "label": "", "type": "chevron", "align": "right" }
+            ],
+            "rows": [
+              { "outlet": "KL Sentral", "code": "KLS", "region": "Klang Valley", "today": 4820, "mtd": 142500, "vsTarget": 108, "topItem": "Ergonomic Wireless Mouse", "alerts": 1, "trend": 12 },
+              { "outlet": "Mid Valley", "code": "MV", "region": "Klang Valley", "today": 5640, "mtd": 168400, "vsTarget": 116, "topItem": "Fitness Smartwatch SE", "alerts": 0, "trend": 18 },
+              { "outlet": "1 Utama", "code": "1U", "region": "Klang Valley", "today": 2890, "mtd": 98200, "vsTarget": 82, "topItem": "USB-C 7-in-1 Hub", "alerts": 4, "trend": -18 }
+            ],
+            "features": ["hover-highlight", "click-to-drill", "conditional-formatting"]
+          }
+        }
+      ]
+    },
+    "ai-bi": {
+      "name": "AI Business Intelligence",
+      "moduleTitlerow": {
+        "lead": "Insights"
+      },
+      "description": "Natural language query interface for business insights with AI-generated visualizations",
+      "usedBy": ["hq_admin", "outlet_manager"],
+      "layout": {
+        "hasSidebar": true,
+        "hasTopBar": true,
+        "structure": "vertical-stack"
+      },
+      "elements": [
+        {
+          "id": "nlq-hero",
+          "type": "nlq-container",
+          "description": "Natural language query input with suggested questions",
+          "position": "top-full-width",
+          "content": {
+            "badge": { "icon": "Sparkles", "text": "Natural Language Query" },
+            "title": "Ask anything about your franchise.",
+            "subtitle": "BM · EN supported",
+            "input": {
+              "placeholder": "Outlet mana sales drop minggu ini?",
+              "actionButton": { "label": "Ask", "icon": "Send" }
+            },
+            "suggestedQueries": [
+              "Top 5 products this month",
+              "Which outlet underperforming?",
+              "Compare KL vs Mid Valley sales",
+              "Forecast next week revenue"
+            ]
+          }
+        },
+        {
+          "id": "ai-response",
+          "type": "ai-response-card",
+          "description": "AI-generated answer with visualization",
+          "position": "below-nlq",
+          "conditional": "shown-after-query",
+          "content": {
+            "header": {
+              "icon": "Bot",
+              "label": "AI Response",
+              "confidence": "Confidence 84%"
+            },
+            "answer": "1 Utama outlet shows the most concerning drop this week — sales down 18% vs. its 30-day baseline (3 consecutive days). Other outlets stable or up.",
+            "visualization": {
+              "type": "bar-chart",
+              "data": [
+                { "outlet": "KL Sentral", "change": 4 },
+                { "outlet": "Mid Valley", "change": 9 },
+                { "outlet": "1 Utama", "change": -18 }
+              ],
+              "colorCoding": "positive for up, negative for down",
+              "height": "140px"
+            },
+            "followUp": "Want to dig deeper? Try: 'Why is 1 Utama down?' or 'Show 1 Utama hourly traffic'"
+          }
+        },
+        {
+          "id": "forecast-card",
+          "type": "forecast-container",
+          "description": "7-day sales forecast with confidence intervals",
+          "position": "bottom-left",
+          "span": "1-column",
+          "content": {
+            "title": "7-Day Sales Forecast",
+            "subtitle": "All outlets · 80% confidence interval",
+            "badge": "Updated 04:00 AM",
+            "chartType": "line-chart",
+            "series": [
+              { "name": "Actual", "style": "solid-line", "color": "ink" },
+              { "name": "Forecast", "style": "dashed-line", "color": "primary" },
+              { "name": "High", "style": "solid-line", "opacity": 0.3, "color": "primary" },
+              { "name": "Low", "style": "solid-line", "opacity": 0.3, "color": "primary" }
+            ],
+            "expectedValue": "RM 41,500",
+            "height": "180px"
+          }
+        },
+        {
+          "id": "anomalies-card",
+          "type": "anomaly-list",
+          "description": "Detected anomalies with severity levels",
+          "position": "bottom-right",
+          "span": "1-column",
+          "content": {
+            "title": "Anomalies Detected",
+            "subtitle": "Last 7 days · ≥80% confidence",
+            "icon": "AlertTriangle",
+            "items": [
+              {
+                "outlet": "1 Utama",
+                "description": "Sales 18% below 30-day baseline",
+                "detail": "3 consecutive days · weekday afternoons",
+                "severity": "high",
+                "actions": ["Investigate →", "Dismiss"]
+              },
+              {
+                "outlet": "Mid Valley",
+                "description": "USB-C hub sales spike +42%",
+                "detail": "Unusual for Tuesday — possible viral mention",
+                "severity": "medium",
+                "actions": ["Investigate →", "Dismiss"]
+              },
+              {
+                "outlet": "KL Sentral",
+                "description": "Refund rate 3× baseline",
+                "detail": "Mostly True Wireless Earbuds Pro — quality issue?",
+                "severity": "medium",
+                "actions": ["Investigate →", "Dismiss"]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "pos": {
+      "name": "Point of Sale",
+      "description": "POS interface for processing customer orders and payments",
+      "usedBy": ["outlet_staff", "outlet_manager"],
+      "layout": {
+        "hasSidebar": false,
+        "hasTopBar": true,
+        "structure": "two-column-split"
+      },
+      "elements": [
+        {
+          "id": "category-tabs",
+          "type": "tab-group",
+          "description": "Product category filter tabs",
+          "position": "top-left",
+          "content": {
+            "categories": ["All", "Computing", "Mobile", "Audio", "Accessories"],
+            "behavior": "filter-product-grid"
+          }
+        },
+        {
+          "id": "product-grid",
+          "type": "product-grid",
+          "description": "Grid of product cards with stock status",
+          "position": "left-main",
+          "layout": "3-column-grid",
+          "content": {
+            "productCard": {
+              "sku": "top-left badge",
+              "lowStockBadge": "top-right (when applicable)",
+              "name": "product name",
+              "stockLevel": "Stock: X",
+              "price": "RM X.XX",
+              "addToCartIcon": "Plus icon",
+              "disabledState": "opacity 0.4 when out of stock"
+            },
+            "products": [
+              { "sku": "CP-001", "name": "Ergonomic Wireless Mouse", "cat": "Computing", "price": 79, "stock": 24, "image": "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "CP-002", "name": "USB-C 7-in-1 Hub", "cat": "Computing", "price": 149, "stock": 6, "lowStock": true, "image": "https://images.unsplash.com/photo-1625948519841-f312fcd523c4?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "CP-003", "name": "Mechanical Keyboard RGB", "cat": "Computing", "price": 329, "stock": 18, "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "CP-004", "name": "FHD 1080p Webcam", "cat": "Computing", "price": 199, "stock": 14, "image": "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "MB-001", "name": "10000mAh Power Bank", "cat": "Mobile", "price": 119, "stock": 56, "image": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "MB-002", "name": "Fitness Smartwatch SE", "cat": "Mobile", "price": 399, "stock": 42, "image": "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "MB-003", "name": "Foldable Phone Stand", "cat": "Mobile", "price": 49, "stock": 38, "image": "https://images.unsplash.com/photo-1585060286355-d6c6a66c9ad9?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "MB-004", "name": "Magnetic Car Phone Mount", "cat": "Mobile", "price": 69, "stock": 22, "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "AU-001", "name": "True Wireless Earbuds Pro", "cat": "Audio", "price": 249, "stock": 3, "lowStock": true, "image": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "AU-002", "name": "Portable Bluetooth Speaker", "cat": "Audio", "price": 199, "stock": 12, "image": "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "AC-001", "name": "65W GaN Charger (2-Port)", "cat": "Accessories", "price": 99, "stock": 19, "image": "https://images.unsplash.com/photo-1583864697804-a9326c10e496?auto=format&fit=crop&w=640&q=80" },
+              { "sku": "AC-002", "name": "Braided USB-C Cable 2m", "cat": "Accessories", "price": 45, "stock": 27, "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=640&q=80" }
+            ]
+          }
+        },
+        {
+          "id": "cart-panel",
+          "type": "cart-sidebar",
+          "description": "Right-side cart panel with order summary",
+          "position": "right-fixed",
+          "width": "384px",
+          "content": {
+            "header": {
+              "title": "Current Sale",
+              "orderNumber": "#1547"
+            },
+            "cashierInfo": "Cashier: Ahmad Faizal",
+            "customerLookup": {
+              "placeholder": "Customer phone (optional)",
+              "detectedCustomer": "Sarah Lim · 2,150 pts available",
+              "tierBadge": "SILVER"
+            },
+            "cartItems": {
+              "emptyState": "Add items to start a sale",
+              "itemRow": {
+                "name": "product name",
+                "price": "RM X.XX each",
+                "quantityControl": ["- button", "qty number", "+ button"],
+                "lineTotal": "RM X.XX"
+              }
+            },
+            "orderSummary": {
+              "rows": [
+                { "label": "Subtotal", "value": "RM X.XX" },
+                { "label": "SST 6%", "value": "RM X.XX" },
+                { "label": "Total", "value": "RM X.XX", "emphasis": true }
+              ]
+            },
+            "paymentMethods": {
+              "title": "Payment Method",
+              "buttons": [
+                { "icon": "Banknote", "label": "Cash" },
+                { "icon": "CreditCard", "label": "Card" },
+                { "icon": "Smartphone", "label": "DuitNow" },
+                { "icon": "Wallet", "label": "GrabPay" }
+              ]
+            },
+            "checkoutButton": {
+              "label": "Complete Sale",
+              "icon": "CheckCircle2",
+              "showsTotal": true
+            }
+          }
+        }
+      ]
+    },
+    "inventory": {
+      "name": "Inventory Management",
+      "moduleTitlerowOutlet": {
+        "lead": "Stock"
+      },
+      "moduleTitlerowHq": {
+        "lead": "Inventory"
+      },
+      "description": "Stock level monitoring and inventory operations",
+      "usedBy": ["hq_admin", "outlet_staff", "outlet_manager"],
+      "layout": {
+        "hasSidebar": true,
+        "hasTopBar": true,
+        "structure": "vertical-stack"
+      },
+      "elements": [
+        {
+          "id": "inventory-summary",
+          "type": "summary-grid",
+          "description": "4-bucket inventory overview",
+          "position": "top-full-width",
+          "layout": "4-column-grid",
+          "cards": [
+            {
+              "icon": "Package",
+              "iconColor": "positive",
+              "label": "Available",
+              "value": "1,438",
+              "subtext": "units across 87 SKUs"
+            },
+            {
+              "icon": "Lock",
+              "iconColor": "warning",
+              "label": "Reserved",
+              "value": "62",
+              "subtext": "held for pending orders"
+            },
+            {
+              "icon": "Truck",
+              "iconColor": "primary",
+              "label": "In Transit",
+              "value": "156",
+              "subtext": "2 active transfers"
+            },
+            {
+              "icon": "AlertTriangle",
+              "iconColor": "negative",
+              "label": "Low Stock",
+              "value": "5",
+              "subtext": "SKUs need replenishment"
+            }
+          ]
+        },
+        {
+          "id": "stock-table",
+          "type": "data-table",
+          "description": "Detailed stock levels per SKU",
+          "position": "bottom-full-width",
+          "content": {
+            "header": {
+              "title": "Stock Levels",
+              "subtitle": "Showing 6 of 87 products",
+              "actions": [
+                { "icon": "Plus", "label": "Stock In" },
+                { "icon": "Truck", "label": "Transfer" }
+              ]
+            },
+            "columns": [
+              { "key": "product", "label": "Product", "type": "compound", "align": "left" },
+              { "key": "available", "label": "Available", "type": "number", "align": "right", "highlight": "low-stock" },
+              { "key": "reserved", "label": "Reserved", "type": "number", "align": "right" },
+              { "key": "transit", "label": "In Transit", "type": "number", "align": "right" },
+              { "key": "threshold", "label": "Threshold", "type": "number", "align": "right" },
+              { "key": "cost", "label": "Cost (WAC)", "type": "currency", "align": "right" },
+              { "key": "margin", "label": "Margin", "type": "percentage-badge", "align": "right" },
+              { "key": "alert", "label": "", "type": "icon", "align": "right" }
+            ],
+            "rows": [
+              { "sku": "CP-001", "name": "Ergonomic Wireless Mouse", "available": 24, "reserved": 3, "transit": 0, "threshold": 10, "cost": 42.00, "retail": 79.00 },
+              { "sku": "CP-002", "name": "USB-C 7-in-1 Hub", "available": 6, "reserved": 2, "transit": 12, "threshold": 10, "cost": 86.00, "retail": 149.00 },
+              { "sku": "MB-001", "name": "10000mAh Power Bank", "available": 56, "reserved": 0, "transit": 0, "threshold": 20, "cost": 62.00, "retail": 119.00 },
+              { "sku": "MB-002", "name": "Fitness Smartwatch SE", "available": 42, "reserved": 8, "transit": 0, "threshold": 20, "cost": 210.00, "retail": 399.00 },
+              { "sku": "AU-001", "name": "True Wireless Earbuds Pro", "available": 3, "reserved": 1, "transit": 24, "threshold": 8, "cost": 118.00, "retail": 249.00 },
+              { "sku": "AU-002", "name": "Portable Bluetooth Speaker", "available": 12, "reserved": 0, "transit": 0, "threshold": 8, "cost": 96.00, "retail": 199.00 }
+            ]
+          }
+        }
+      ]
+    },
+    "loyalty": {
+      "name": "Loyalty Program",
+      "description": "Customer loyalty profile and transaction history (HQ view)",
+      "usedBy": ["hq_admin", "outlet_manager"],
+      "layout": {
+        "hasSidebar": true,
+        "hasTopBar": true,
+        "structure": "two-column-split"
+      },
+      "elements": [
+        {
+          "id": "customer-profile-card",
+          "type": "profile-container",
+          "description": "Left column: customer profile with tier and points",
+          "position": "left",
+          "span": "1-column",
+          "content": {
+            "avatar": {
+              "initials": "SL",
+              "size": "56px"
+            },
+            "name": "Sarah Lim Wei Ling",
+            "phone": "+60 12-345 6789",
+            "tierBadge": {
+              "label": "SILVER",
+              "icon": "Crown",
+              "color": "#C0C0C0"
+            },
+            "pointsSection": {
+              "label": "Current Balance",
+              "value": "2,150",
+              "unit": "points",
+              "conversion": "≈ RM 21.50 redeemable"
+            },
+            "tierProgress": {
+              "label": "Progress to Gold",
+              "current": 8420,
+              "target": 20000,
+              "remaining": "11,580 lifetime points to reach Gold tier (2× multiplier)"
+            },
+            "stats": {
+              "visits": 47,
+              "lifetimeSpend": "RM 4,847",
+              "joined": "Mar 2024"
+            }
+          }
+        },
+        {
+          "id": "transaction-history",
+          "type": "transaction-list",
+          "description": "Right column: customer transaction history",
+          "position": "right",
+          "span": "2-columns",
+          "content": {
+            "header": {
+              "title": "Recent Activity",
+              "subtitle": "Last 5 transactions across all outlets"
+            },
+            "items": [
+              { "date": "Today, 14:23", "outlet": "Mid Valley", "amount": 87.50, "points": "+131", "type": "earn" },
+              { "date": "26 Apr, 12:15", "outlet": "KL Sentral", "amount": 45.00, "points": "+67", "type": "earn" },
+              { "date": "24 Apr, 19:42", "outlet": "Mid Valley", "amount": -200, "points": "-200", "type": "redeem" },
+              { "date": "22 Apr, 13:08", "outlet": "1 Utama", "amount": 124.00, "points": "+186", "type": "earn" },
+              { "date": "19 Apr, 09:55", "outlet": "Mid Valley", "amount": 32.50, "points": "+48", "type": "earn" }
+            ],
+            "rowLayout": {
+              "icon": "ArrowUpRight for earn, Gift for redeem",
+              "iconColor": "positive for earn, accent for redeem",
+              "outlet": "outlet name",
+              "date": "date and time",
+              "transactionType": "Purchase or Redemption",
+              "amount": "RM X.XX",
+              "points": "±X pts"
+            }
+          }
+        }
+      ]
+    },
+    "ai-customer-chat": {
+      "name": "Customer Support Chat",
+      "moduleTitlerow": {
+        "lead": "Help"
+      },
+      "description": "AI-powered customer support chat interface",
+      "usedBy": ["all"],
+      "layout": {
+        "hasSidebar": true,
+        "hasTopBar": true,
+        "structure": "full-height-chat"
+      },
+      "elements": [
+        {
+          "id": "chat-header",
+          "type": "chat-header",
+          "description": "Chat header with bot info",
+          "position": "top",
+          "content": {
+            "icon": "Bot",
+            "title": "Franchise OS Assistant",
+            "status": "Online · BM & EN",
+            "statusIndicator": "green dot",
+            "escalationButton": "Talk to human →"
+          }
+        },
+        {
+          "id": "chat-messages",
+          "type": "message-list",
+          "description": "Scrollable message area",
+          "position": "middle",
+          "content": {
+            "messageBubble": {
+              "aiMessage": {
+                "avatar": "Bot icon in primary-colored circle",
+                "bubble": "cardSubtle background, rounded-2xl",
+                "alignment": "left",
+                "supportsMarkdown": true
+              },
+              "userMessage": {
+                "avatar": "User icon",
+                "bubble": "primary background, white text",
+                "alignment": "right"
+              }
+            },
+            "sampleConversation": [
+              { "sender": "ai", "text": "Selamat datang ke Franchise OS! Saya boleh bantu dengan pertanyaan tentang outlet, pesanan, atau loyalty rewards. Apa yang boleh saya bantu hari ini?" },
+              { "sender": "user", "text": "Berapa banyak points saya ada?" },
+              { "sender": "ai", "text": "Anda mempunyai **2,150 points** dalam akaun Silver tier anda. Anda perlu **11,580 points** lagi untuk naik ke Gold tier. Nak tengok cara untuk redeem?" },
+              { "sender": "user", "text": "Boleh tunjuk apa saya boleh redeem?" },
+              { "sender": "ai", "text": "Untuk 2,150 points, anda boleh redeem:\n\n• RM 21.50 discount (rebate penuh)\n• Free 65W GaN Charger (1,500 points)\n• Free Ergonomic Wireless Mouse (2,000 points)\n\nMana satu yang menarik?" }
+            ]
+          }
+        },
+        {
+          "id": "chat-input",
+          "type": "input-area",
+          "description": "Message input field",
+          "position": "bottom",
+          "content": {
+            "placeholder": "Tanya apa-apa... (BM atau English)",
+            "sendButton": {
+              "label": "Send",
+              "icon": "Send"
+            },
+            "disclaimer": "AI assistant. Conversations may be reviewed for service improvement."
+          }
+        }
+      ]
+    },
+    "customer-portal": {
+      "name": "Customer Loyalty Portal",
+      "moduleTitlerow": {
+        "lead": "Loyalty"
+      },
+      "description": "Customer-facing loyalty program dashboard",
+      "usedBy": ["customer"],
+      "layout": {
+        "hasSidebar": true,
+        "hasTopBar": true,
+        "structure": "vertical-stack"
+      },
+      "elements": [
+        {
+          "id": "hero-card",
+          "type": "gradient-hero",
+          "description": "Large gradient hero card with points balance",
+          "position": "top-full-width",
+          "content": {
+            "backgroundGradient": "primary to accent",
+            "decoration": "Crown icon watermark top-right",
+            "tierLabel": "Silver Member · Mid Valley Cafe",
+            "pointsDisplay": "2,150 pts",
+            "conversion": "≈ RM 21.50 redeemable now",
+            "actions": [
+              { "label": "Redeem now", "style": "white-button" },
+              { "label": "View rewards", "style": "outline-button" }
+            ]
+          }
+        },
+        {
+          "id": "tier-progress-card",
+          "type": "tier-progress",
+          "description": "Tier progression visualization",
+          "position": "middle-left",
+          "span": "2-columns",
+          "content": {
+            "title": "Path to Gold tier",
+            "subtitle": "Earn 2× points on every transaction",
+            "tierMilestones": [
+              { "name": "Bronze", "points": "0", "icon": "Star", "status": "passed" },
+              { "name": "Silver", "points": "5K", "icon": "CheckCircle2", "status": "current", "highlight": "2px accent border" },
+              { "name": "Gold", "points": "20K", "icon": "Star", "status": "locked" }
+            ],
+            "connectorLine": "primary color for passed segments, cardSubtle for locked",
+            "estimate": "11,580 lifetime points needed for Gold. At your current pace (~250 pts/month), about 46 months"
+          }
+        },
+        {
+          "id": "customer-stats",
+          "type": "stats-card",
+          "description": "Customer loyalty statistics",
+          "position": "middle-right",
+          "span": "1-column",
+          "content": {
+            "title": "You're a top customer",
+            "stats": [
+              { "label": "Visits this year", "value": "47" },
+              { "label": "Lifetime spend", "value": "RM 4,847" },
+              { "label": "Member since", "value": "Mar 2024" },
+              { "label": "Favorite outlet", "value": "Mid Valley", "highlight": "primary color" }
+            ]
+          }
+        },
+        {
+          "id": "activity-history",
+          "type": "activity-list",
+          "description": "Customer's recent points activity",
+          "position": "bottom-full-width",
+          "content": {
+            "header": {
+              "title": "Recent Activity"
+            },
+            "items": "Same structure as loyalty page transaction history"
+          }
+        }
+      ]
+    }
+  },
+  "sharedComponents": {
+    "sidebar": {
+      "description": "Left navigation sidebar",
+      "structure": {
+        "logoSection": {
+          "gradientLogo": "F letter in gradient square",
+          "brandName": "Franchise OS",
+          "outletName": "Mid Valley Cafe"
+        },
+        "sectionHeader": "Dynamic based on role (Workspace / Outlet Tools / My Account)",
+        "navItems": "Role-dependent navigation items",
+        "userBlock": {
+          "avatar": "Role-based icon",
+          "userName": "Sarah Lim / Ahmad Faizal / HQ Admin",
+          "userRole": "Silver tier / Outlet Staff / Administrator",
+          "logoutButton": "LogOut icon"
+        }
+      },
+      "navItemsByRole": {
+        "hq": [
+          { "key": "dashboard", "label": "Dashboard", "icon": "LayoutDashboard" },
+          { "key": "pos", "label": "Sales POS", "icon": "ShoppingCart" },
+          { "key": "inventory", "label": "Inventory", "icon": "Boxes" },
+          { "key": "store-orders", "label": "Store orders", "icon": "ClipboardList" },
+          { "key": "customers", "label": "Customers", "icon": "Users" }
+        ],
+        "staff": [
+          { "key": "pos", "label": "POS Sale", "icon": "ShoppingCart" },
+          { "key": "inventory", "label": "Inventory", "icon": "Boxes" },
+          { "key": "store-orders", "label": "Store orders", "icon": "ClipboardList" }
+        ],
+        "customer": [
+          { "key": "shop", "label": "Shop", "icon": "ShoppingBag" },
+          { "key": "customer-portal", "label": "Loyalty", "icon": "Award" },
+          { "key": "my-orders", "label": "My orders", "icon": "Truck" },
+          { "key": "ai-customer-chat", "label": "Help & Chat", "icon": "MessageSquare" }
+        ]
+      }
+    },
+    "topBar": {
+      "description": "Top header bar",
+      "structure": {
+        "breadcrumb": "Uppercase tracked breadcrumb (e.g., HQ / Dashboard)",
+        "pageTitle": "Page title in Sora font",
+        "searchBar": {
+          "placeholder": "Search outlets, products, customers…",
+          "icon": "Search"
+        },
+        "notificationBell": {
+          "icon": "Bell",
+          "indicator": "Accent-colored dot for unread"
+        }
+      }
+    }
+  }
+}

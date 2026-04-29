@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Verify that it’s you</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #131314;
+      --bg-elevated: #1e1f20;
+      --text-primary: #e3e3e3;
+      --text-secondary: #c4c7c5;
+      --text-muted: #9aa0a6;
+      --link: #8ab4f8;
+      --link-hover: #aec9ff;
+      --border: #444746;
+      --border-input-error: #f28b82;
+      --error: #f28b82;
+      --btn-bg: #8ab4f8;
+      --btn-text: #062e6f;
+      --chip-bg: #303134;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Roboto", system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Gemini-style shell: full canvas, content in one centered column */
+    .shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(32px, 6vh, 72px) 24px 40px;
+    }
+
+    .column {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 20px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      align-self: flex-start;
+    }
+
+    .logo svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      max-width: 52ch;
+    }
+
+    .account-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--chip-bg);
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-family: inherit;
+      text-align: left;
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    .account-chip:focus-visible {
+      outline: 2px solid var(--link);
+      outline-offset: 2px;
+    }
+
+    .account-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f4b400, #ea8600);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .account-email {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .chevron {
+      margin-left: 4px;
+      opacity: 0.8;
+      flex-shrink: 0;
+    }
+
+    .instruction {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .code-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .code-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 0 12px;
+    }
+
+    .code-input-row {
+      display: flex;
+      align-items: stretch;
+      border-radius: 4px;
+      border: 1px solid var(--border-input-error);
+      background: var(--bg-elevated);
+      overflow: hidden;
+      min-height: 56px;
+    }
+
+    .code-prefix {
+      display: flex;
+      align-items: center;
+      padding: 0 4px 0 14px;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      user-select: none;
+    }
+
+    .code-input-row input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 14px 14px 14px 4px;
+      font-family: inherit;
+      min-width: 0;
+    }
+
+    .code-input-row input:focus {
+      outline: none;
+    }
+
+    .error-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 4px 0 0;
+      font-size: 0.75rem;
+      color: var(--error);
+    }
+
+    .error-icon {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1.5px solid var(--error);
+      color: var(--error);
+      font-size: 10px;
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+    }
+
+    .link {
+      color: var(--link);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      width: fit-content;
+    }
+
+    .link:hover {
+      color: var(--link-hover);
+      text-decoration: underline;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 8px;
+      align-items: flex-end;
+    }
+
+    .actions-top {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    .btn-next {
+      align-self: flex-end;
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: none;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      min-width: 88px;
+    }
+
+    .btn-next:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn-next:focus-visible {
+      outline: 2px solid var(--link);
+      outline-offset: 2px;
+    }
+
+    .page-footer {
+      padding: 16px 24px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px 24px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .footer-lang {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+      font: inherit;
+      padding: 4px 6px;
+      margin: -4px -6px;
+      border-radius: 4px;
+    }
+
+    .footer-lang:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+      color: var(--text-secondary);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="stage">
+      <div class="column">
+        <div class="logo">
+          <svg viewBox="0 0 48 48" role="img" aria-label="Google">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6C45.27 36.6 46.98 31.08 46.98 24.55z" />
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+            <path fill="none" d="M0 0h48v48H0z" />
+          </svg>
+        </div>
+
+        <h1>Verify that it’s you</h1>
+
+        <p class="lead">
+          To help keep your account safe, Google wants to make sure that it’s really you
+        </p>
+
+        <button type="button" class="account-chip" aria-haspopup="listbox" aria-expanded="false">
+          <span class="account-avatar" aria-hidden="true">K</span>
+          <span class="account-email">kesatriaawan.ai@gmail.com</span>
+          <span class="chevron" aria-hidden="true">▾</span>
+        </button>
+
+        <a class="link" href="#">Resend it</a>
+
+        <p class="instruction">
+          Enter the six-digit code that Google just sent to your previous recovery phone 011-5753 0045
+        </p>
+
+        <div class="code-group">
+          <label class="code-label" for="otp-input">Enter the code</label>
+          <div class="code-input-row" role="group" aria-label="Enter the code">
+            <span class="code-prefix" aria-hidden="true">G-</span>
+            <input
+              id="otp-input"
+              type="text"
+              name="code"
+              value="107838"
+              autocomplete="one-time-code"
+              inputmode="numeric"
+              aria-invalid="true"
+              aria-describedby="code-err"
+            />
+          </div>
+          <p id="code-err" class="error-line">
+            <span class="error-icon" aria-hidden="true">!</span>
+            Wrong code. Try again.
+          </p>
+        </div>
+
+        <div class="actions">
+          <div class="actions-top">
+            <a class="link" href="#">More ways to verify</a>
+          </div>
+          <button type="button" class="btn-next">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      <button type="button" class="footer-lang">English (United Kingdom) ▾</button>
+      <div class="footer-links">
+        <a href="#">Help</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
